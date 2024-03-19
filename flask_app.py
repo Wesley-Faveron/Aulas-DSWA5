@@ -2,7 +2,7 @@ from flask import Flask, render_template, session, redirect, url_for, flash, req
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField
+from wtforms import StringField, SubmitField, SelectField, PasswordField
 from wtforms.validators import DataRequired
 from datetime import datetime
 
@@ -12,13 +12,17 @@ app.config['SECRET_KEY'] = 'hard to guess string'
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 
-
 class NameForm(FlaskForm):
     nome        = StringField('Informe o seu nome'                  , validators=[DataRequired()])
     sobrenome   = StringField('Informe o seu sobrenome:'            , validators=[DataRequired()])
     instituicao = StringField('Informe a sua Instituição de ensino:', validators=[DataRequired()])
     disciplina  = SelectField('Informe a sua disciplina:'           , choices=[('DSWA5', 'DSWA5'), ('DWBA4', 'DWBA4'), ('Gestão de projetos', 'Gestão de projetos')])
     submit      = SubmitField('Submit')
+
+class LoginForm(FlaskForm):
+    login  = StringField('Usuário ou e-mail'     , validators=[DataRequired()])
+    senha  = PasswordField('Informe a sua senha' , validators=[DataRequired()])
+    submit = SubmitField('Submit')
 
 
 @app.errorhandler(404)
@@ -54,6 +58,22 @@ def index():
                             disciplina   = session.get('disciplina'),
                             remote_addr  = remote_addr,
                             remote_host  = remote_host)
+
+
+@app.route('/login')
+def login():
+    return render_template('login.html',
+                            current_time = datetime.utcnow(),
+                            form         = LoginForm())
+
+
+@app.route('/loginResponse', methods=['GET', 'POST'])
+def loginResponse():
+    form            = LoginForm()
+    session['name'] = form.login.data
+    return render_template('loginResponse.html',
+                            current_time = datetime.utcnow(),
+                            nome         = session.get('name'))
 
 
 
