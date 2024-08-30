@@ -5,15 +5,12 @@
 
 {% block page_content %}
 <div class="page-header">
-    <h1>Olá, {% if name %}{{ name }}{% else %}Estranho{% endif %}!</h1>
-    <h3>A sua Insituição de ensino é {{institution}}</h3>
-    <h3>Está cursando a disciplina de {{choices[discipline]}}</h3>
-    <br>
-    <h4>O IP do computador remoto é: {{remote_addr}}</h4>
-    <h4>O host da aplicação é: {{remote_host}}</h4>
+    <h1>Avaliação semestral</h1>
+    <h3>Aluno: Wesley Faveron de Almeida</h3>
+    <h3>Prontuário: PT3021742</h3>
 </div>
-{{ wtf.quick_form(form) }}
-<br>
-<p>The local date and time is {{ moment(current_time).format('LLL') }}.</p>
-<p>That was {{ moment(current_time).fromNow(refresh=True) }}.</p>
+
+<div>
+    <p>A data e hora local é {{ moment(current_time).format('MMMM D, YYYY h:mm A') }}.</p>
+</div>
 {% endblock %}
